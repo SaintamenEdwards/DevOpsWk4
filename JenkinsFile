@@ -12,7 +12,8 @@ git
 'https://github.com/dlambrig/simple-java-maven-app.git'
 container('maven') {
 stage('Build a Maven project') {
-sh '''
+def mvnHome = tool name: '', type: 'maven'
+sh "$(mvHome)/bin/mvn package"
 echo "maven build"
 mvn -B -DskipTests clean package
 '''
