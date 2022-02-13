@@ -15,7 +15,7 @@ stage('Build a Maven project') {
 def mvnHome = tool name: '', type: 'maven'
 sh "${mvHome}/bin/mvn package"
 echo "maven build"
-mvn -B -DskipTests clean package
+mvn -B -DskipTests clean package }
 '''
 }
 }
