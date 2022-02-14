@@ -16,7 +16,7 @@ podTemplate(yaml: '''
       container('maven') {
         stage('Build a Maven project') {
           def mvnHome = tool name: '', type: 'maven'
-          sh "$(mvHome)/bin/mvn package
+          sh "${mvHome}/bin/mvn "
         }
       }
     }
