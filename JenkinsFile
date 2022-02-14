@@ -15,7 +15,8 @@ podTemplate(yaml: '''
       git 'https://github.com/dlambrig/simple-java-maven-app.git'
       container('maven') {
         stage('Build a Maven project') {
-          sh 'mvn -B -ntp clean install'
+          def mvnHome = tool name: '', type: 'maven'
+          sh "$(mvHome)/bin/mvn package
         }
       }
     }
