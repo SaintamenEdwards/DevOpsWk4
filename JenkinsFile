@@ -1,24 +1,37 @@
-podTemplate(yaml: '''
-    apiVersion: v1
-    kind: Pod
-    spec:
-      containers:
-      - name: maven
-        image: maven:3.8.1-jdk-8
-        command:
-        - sleep
-        args:
-        - 30d
-''') {
-  node(POD_LABEL) {
-    stage('Get a Maven project') {
-      git 'https://github.com/dlambrig/simple-java-maven-app.git'
-      container('maven') {
-        stage('Build a Maven project') {
-          def mvnHome = tool name: '', type: 'maven'
-          sh "${mvHome}/bin/mvn "
-        }
-      }
-    }
-}
-}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: jenkins
+spec:
+replicas: 1
+selector:
+matchLabels:
+app: jenkins
+template:
+metadata:
+labels:
+app: jenkins
+spec:
+containers:
+- name: jenkins
+image: jenkins/jenkins:latest
+ports:
+- containerPort: 8080
+volumeMounts:
+- name: jenkins-home
+mountPath: /var/jenkins_home
+volumes:
+- name: jenkins-home
+emptyDir: { }
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
